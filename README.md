@@ -358,6 +358,10 @@ Common generated directories are automatically excluded:
 - `dist/`
 - `vendor/` (Go vendored dependencies, matched by domain-based child paths)
 
+Repository `.gitignore` files are also honored automatically during indexing.
+Rules are applied only within the closest parent repository boundary containing
+`.git`, and only affect what gets indexed under the discovered codebase root.
+
 ## Troubleshooting
 
 ### `sqlite3.Connection object has no attribute enable_load_extension`

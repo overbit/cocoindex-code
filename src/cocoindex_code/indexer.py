@@ -5,10 +5,10 @@ from cocoindex.connectors import localfs, sqlite
 from cocoindex.connectors.sqlite import Vec0TableDef
 from cocoindex.ops.text import RecursiveSplitter, detect_code_language
 from cocoindex.resources.chunk import Chunk
-from cocoindex.resources.file import PatternFilePathMatcher
 from cocoindex.resources.id import IdGenerator
 
 from .config import config
+from .gitignore import GitIgnoreFilePathMatcher
 from .shared import CODEBASE_DIR, SQLITE_DB, CodeChunk, embedder
 
 # File patterns for supported languages
@@ -150,9 +150,11 @@ async def app_main() -> None:
     files = localfs.walk_dir(
         coco.use_context(CODEBASE_DIR),
         recursive=True,
-        path_matcher=PatternFilePathMatcher(
+        path_matcher=GitIgnoreFilePathMatcher(
+            root_path=config.codebase_root_path,
             included_patterns=INCLUDED_PATTERNS,
             excluded_patterns=EXCLUDED_PATTERNS,
+            git_root_path=config.git_root_path,
         ),
     )
 

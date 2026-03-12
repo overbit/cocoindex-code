@@ -73,6 +73,7 @@ class Config:
     """Configuration loaded from environment variables."""
 
     codebase_root_path: Path
+    git_root_path: Path | None
     embedding_model: str
     index_dir: Path
     device: str | None
@@ -88,6 +89,7 @@ class Config:
             root = Path(root_path_str).resolve()
         else:
             root = _discover_codebase_root()
+        git_root = _find_root_with_marker(root, [".git"])
 
         # Get embedding model
         # Prefix "sbert/" for SentenceTransformers models, otherwise LiteLLM.
@@ -120,6 +122,7 @@ class Config:
 
         return cls(
             codebase_root_path=root,
+            git_root_path=git_root,
             embedding_model=embedding_model,
             index_dir=index_dir,
             device=device,
